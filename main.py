@@ -13,5 +13,15 @@ if __name__ == "__main__":
     df = load_dataset()
     print(df.head())
 
-    # TODO(alumno): importar el subpaquete de mintic que desee probar, p. ej.:
-    # from mintic.kmeans import KMeansClustering
+    from mintic.ensemble.random_forest import (
+        build_random_forest,
+        predict_ensemble,
+    )
+
+    # El reto trabaja con datos categóricos; separamos la última columna como
+    # etiqueta y usamos las demás columnas como características.
+    X = df.iloc[:, :-1].astype(str).to_numpy()
+    y = df.iloc[:, -1].astype(str).to_numpy()
+    forest = build_random_forest(X, y, n_trees=10, random_state=42)
+    predictions = predict_ensemble(forest, X[:5])
+    print("Predicciones de ejemplo:", predictions)
